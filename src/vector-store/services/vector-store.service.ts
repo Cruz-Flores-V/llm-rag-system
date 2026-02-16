@@ -1,8 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { QdrantClient } from '@qdrant/js-client-rest';
 
-import { envs } from '../../config';
+import {
+  ChunkWithMetadata,
+  DocumentMetadata,
+  Metadata,
+} from '../../document/types';
 import { EmbeddedChunk } from '../types';
+import { envs } from '../../config';
+
+type QueryOptions = {
+  metadataFilter?: DocumentMetadata;
+  topK?: number;
+};
+export type ChunkFromStorage = Pick<
+  ChunkWithMetadata,
+  'content' | 'metadata'
+> & {
+  score: number;
+};
 
 @Injectable()
 export class VectorStoreService {
@@ -32,5 +48,45 @@ export class VectorStoreService {
     });
 
     return void 0;
+  }
+
+  async query(
+    embedding: number[],
+    { metadataFilter, topK = 5 }: QueryOptions = {},
+  ): Promise<ChunkFromStorage[]> {
+    const searchResult = await this.qdrantClient.search(
+      envs.qdrant.collectionName,
+      {
+        vector: embedding,
+        limit: topK,
+        ...(metadataFilter ? { filter: this.buildFilter(metadataFilter) } : {}),
+      },
+    );
+    const docs = searchResult.map((point) => {
+      const { content, metadata } = point.payload as {
+        content: string;
+        metadata: Metadata;
+      };
+      return {
+        content,
+        metadata,
+        score: point.score,
+      };
+    });
+
+    return docs;
+  }
+
+  private buildFilter(metadata: DocumentMetadata): {
+    must: Array<{ key: string; match: DocumentMetadata }>;
+  } {
+    const conditions = Object.entries(metadata).map(([key, value]) => ({
+      key: `metadata.${key}`,
+      match: { value },
+    }));
+
+    return {
+      must: conditions,
+    };
   }
 }

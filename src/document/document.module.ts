@@ -9,6 +9,7 @@ import { VectorStoreModule } from '../vector-store/vector-store.module';
 @Module({
   imports: [EmbeddingModule, VectorStoreModule],
   providers: [DocumentService, SplitterService],
+  exports: [DocumentService],
   controllers: [DocumentController],
 })
 export class DocumentModule {}

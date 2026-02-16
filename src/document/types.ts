@@ -2,7 +2,7 @@ export type DocumentMetadata = {
   [key: string]: string | number | Date;
 };
 
-type Metadata = {
+export type Metadata = {
   id: string;
   chunkIndex: number;
   totalChunks: number;
