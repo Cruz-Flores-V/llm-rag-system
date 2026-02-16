@@ -27,7 +27,6 @@ export class VectorStoreService {
         metadata: chunk.metadata,
       },
     }));
-
     await this.qdrantClient.upsert(envs.qdrant.collectionName, {
       points,
     });
