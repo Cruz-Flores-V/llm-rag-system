@@ -2,9 +2,10 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
+import { envs } from './config';
 
 const logger = new Logger('Main');
-const port = process.env.PORT ?? 3000;
+const port = envs.port;
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
