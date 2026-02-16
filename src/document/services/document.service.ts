@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { ChunkWithMetadata } from '../types';
 import { CreateDocumentDto } from '../dto/create-document.dto';
-import { EmbeddingService } from '../../embeddings/services/embedding.service';
+import { EmbeddingService } from '../../embedding/services/embedding.service';
 import { SplitterService } from './splitter.service';
 import { VectorStoreService } from '../../vector-store/services/vector-store.service';
 
