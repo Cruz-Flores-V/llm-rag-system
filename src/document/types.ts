@@ -2,13 +2,11 @@ export type DocumentMetadata = {
   [key: string]: string | number | Date;
 };
 
-type ExtendableMetadata<T extends object> = T & DocumentMetadata;
-
-type Metadata = ExtendableMetadata<{
+type Metadata = {
   id: string;
   chunkIndex: number;
   totalChunks: number;
-}>;
+} & DocumentMetadata;
 
 export type ChunkWithMetadata = {
   content: string;

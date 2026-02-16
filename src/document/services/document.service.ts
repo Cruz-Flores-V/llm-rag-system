@@ -30,7 +30,6 @@ export class DocumentService {
       }),
     );
     await this.vectorStoreService.addDocumentChunks(chunksWithMetadata);
-    console.log({ id, text, metadata, chunks, embeddings, chunksWithMetadata });
 
     return void 0;
   }
