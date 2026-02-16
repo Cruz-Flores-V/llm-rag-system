@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 
 import { DocumentController } from './document.controller';
 import { DocumentService } from './services/document.service';
-import { EmbeddingsModule } from '../embeddings/embeddings.module';
+import { EmbeddingModule } from '../embeddings/embedding.module';
 import { SplitterService } from './services/splitter.service';
-import { VectoreStoreModule } from '../vectore-store/vectore-store.module';
+import { VectorStoreModule } from '../vector-store/vector-store.module';
 
 @Module({
-  imports: [EmbeddingsModule, VectoreStoreModule],
+  imports: [EmbeddingModule, VectorStoreModule],
   providers: [DocumentService, SplitterService],
   controllers: [DocumentController],
 })

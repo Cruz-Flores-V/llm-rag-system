@@ -4,7 +4,7 @@ import { ChunkWithMetadata } from '../types';
 import { CreateDocumentDto } from '../dto/create-document.dto';
 import { EmbeddingService } from '../../embeddings/services/embedding.service';
 import { SplitterService } from './splitter.service';
-import { VectorStoreService } from '../../vectore-store/services/vector-store.service';
+import { VectorStoreService } from '../../vector-store/services/vector-store.service';
 
 @Injectable()
 export class DocumentService {
