@@ -1,7 +1,7 @@
 import { ChatVertexAI } from '@langchain/google-vertexai';
 import { Injectable } from '@nestjs/common';
 
-import { envs } from 'src/config';
+import { envs } from '../../config';
 
 @Injectable()
 export class LlmService {

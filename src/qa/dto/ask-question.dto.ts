@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
-import { DocumentMetadata } from '../../document/types';
+import { DocumentMetadata } from '../../common/types';
 
 export class AskQuestionDto {
   @IsString()

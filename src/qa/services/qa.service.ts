@@ -16,11 +16,10 @@ export class QaService {
     metadataFilter,
     topK,
   }: AskQuestionDto): Promise<string> {
-    const chunks = await this.documentService.search(
-      question,
+    const chunks = await this.documentService.search(question, {
       metadataFilter,
       topK,
-    );
+    });
     const context = chunks.map((c) => c.content).join('\n---\n');
     const prompt = `Contexto:\n${context}\n\nPregunta: ${question}`;
 

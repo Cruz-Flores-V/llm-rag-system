@@ -7,7 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-import { DocumentMetadata } from '../types';
+import { DocumentMetadata } from '../../common/types';
 
 export class CreateDocumentDto {
   @IsUUID()
