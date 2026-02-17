@@ -24,4 +24,10 @@ export class EmbeddingService {
   async embedDocuments(documents: string[]): Promise<number[][]> {
     return this.embeddings.embedDocuments(documents);
   }
+
+  async embedQuery(query: string): Promise<number[]> {
+    const embedding = await this.embeddings.embedQuery(query);
+
+    return embedding;
+  }
 }

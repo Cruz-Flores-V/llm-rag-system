@@ -6,4 +6,4 @@ import { VectorStoreService } from './services/vector-store.service';
   providers: [VectorStoreService],
   exports: [VectorStoreService],
 })
-export class VectoreStoreModule {}
+export class VectorStoreModule {}

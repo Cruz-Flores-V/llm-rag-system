@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
+import { ChunkFromStorage } from '../../vector-store/types';
 import { ChunkWithMetadata } from '../types';
 import { CreateDocumentDto } from '../dto/create-document.dto';
-import { EmbeddingService } from '../../embeddings/services/embedding.service';
+import { EmbeddingService } from '../../embedding/services/embedding.service';
+import { QueryOptions } from '../../common/types';
 import { SplitterService } from './splitter.service';
-import { VectorStoreService } from '../../vectore-store/services/vector-store.service';
+import { VectorStoreService } from '../../vector-store/services/vector-store.service';
 
 @Injectable()
 export class DocumentService {
@@ -32,5 +34,18 @@ export class DocumentService {
     await this.vectorStoreService.addDocumentChunks(chunksWithMetadata);
 
     return void 0;
+  }
+
+  async search(
+    question: string,
+    { metadataFilter, topK = 5 }: QueryOptions = {},
+  ): Promise<ChunkFromStorage[]> {
+    const qEmbedding = await this.embeddingService.embedQuery(question);
+    const chunks = await this.vectorStoreService.query(qEmbedding, {
+      metadataFilter,
+      topK,
+    });
+
+    return chunks;
   }
 }

@@ -1,8 +1,6 @@
-export type DocumentMetadata = {
-  [key: string]: string | number | Date;
-};
+import { DocumentMetadata } from '../common/types';
 
-type Metadata = {
+export type Metadata = {
   id: string;
   chunkIndex: number;
   totalChunks: number;

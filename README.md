@@ -1,98 +1,140 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# LLM RAG System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS API for Retrieval-Augmented Generation (RAG) using:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- **Google Vertex AI** for embeddings and chat completions
+- **Qdrant** as vector database
+- **LangChain** utilities for text splitting and model integrations
 
-## Description
+## What this service does
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1. Receives documents through an HTTP endpoint.
+2. Splits text into chunks.
+3. Generates embeddings for each chunk.
+4. Stores vectors + metadata in Qdrant.
+5. Answers questions by retrieving relevant chunks and sending context to an LLM.
 
-## Project setup
+## Tech stack
 
-```bash
-$ yarn install
-```
+- Node.js + NestJS (TypeScript)
+- LangChain (`@langchain/google-vertexai`, `@langchain/textsplitters`)
+- Qdrant (`@qdrant/js-client-rest`)
+- Validation with `class-validator` + `class-transformer`
 
-## Compile and run the project
+## Project structure
 
-```bash
-# development
-$ yarn run start
+- `src/document`: ingestion flow (`/document/add`)
+- `src/qa`: question-answer flow (`/qa/ask`)
+- `src/embedding`: embedding provider integration
+- `src/llm`: chat model integration
+- `src/vector-store`: Qdrant persistence and similarity search
+- `src/config`: environment parsing and validation
 
-# watch mode
-$ yarn run start:dev
+## Requirements
 
-# production mode
-$ yarn run start:prod
-```
+- Node.js 20+
+- Yarn
+- Docker (for local Qdrant)
+- Google Cloud credentials with access to Vertex AI models
 
-## Run tests
+## Environment variables
+
+Copy `.env.example` to `.env` and update values.
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+cp .env.example .env
 ```
 
-## Deployment
+Required vars used by the app:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- `PORT`
+- `NODE_ENV` (`local` | `development` | `production`)
+- `GOOGLE_CREDENTIALS_JSON` (full JSON string)
+- `GOOGLE_EMBEDDING_MODEL` (Vertex embedding model name)
+- `QDRANT_URL`
+- `QDRANT_COLLECTION_NAME`
+- `QDRANT_API_KEY` (required in `development` and `production`)
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Local setup
+
+Install dependencies:
 
 ```bash
-$ yarn install -g mau
-$ mau deploy
+yarn install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Start Qdrant:
 
-## Resources
+```bash
+docker compose up -d
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+Run API in dev mode:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+yarn start:dev
+```
 
-## Support
+Server starts on `http://localhost:3000` by default.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## API endpoints
 
-## Stay in touch
+### `POST /document/add`
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Ingest a document.
 
-## License
+Request body:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "text": "Long document content...",
+  "metadata": {
+    "source": "api",
+    "priority": 1
+  }
+}
+```
+
+Notes:
+
+- `id` must be UUID
+- `text` min length is 10
+- `metadata` is optional object
+
+### `POST /qa/ask`
+
+Ask a question using retrieved context.
+
+Request body:
+
+```json
+{
+  "question": "What is this document about?",
+  "metadataFilter": {
+    "id": "550e8400-e29b-41d4-a716-446655440000"
+  },
+  "topK": 5
+}
+```
+
+Returns plain text answer from the LLM.
+
+## Useful files
+
+- Qdrant reset script: `reset-qdrant-vector-store.sh`
+
+## Reset Qdrant collection
+
+This script deletes and recreates a collection named `documents` with vector size `768`:
+
+```bash
+./reset-qdrant-vector-store.sh
+```
+
+If you use this script, set `QDRANT_COLLECTION_NAME=documents` (or update the script to match your collection name).
+
+## Scripts
+
+- `yarn start:dev` - run in watch mode
+
