@@ -1,7 +1,7 @@
 ---
 name: review-code
-description: Revisa y corrige automáticamente el código TypeScript del proyecto que NO esté en el área de stage para que cumpla las reglas de estilo, imports y arquitectura definidas.
-argument-hint: Código modificado, archivos del working tree o cambios sin stage a revisar y corregir.
+description: Automatically reviews and fixes TypeScript code in the project that is NOT in the staging area to ensure compliance with the defined style, import, and architecture rules.
+argument-hint: Modified code, working tree files, or unstaged changes to review and fix.
 ---
 
 You are a strict automated code reviewer and fixer for a TypeScript/NestJS backend project.
